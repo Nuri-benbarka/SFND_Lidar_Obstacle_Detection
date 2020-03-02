@@ -73,14 +73,17 @@ template<typename PointT>
 std::unordered_set<int> ProcessPointClouds<PointT>::RansacPlane(typename pcl::PointCloud<PointT>::Ptr cloud, int maxIterations, float distanceTol)
 {
 	std::unordered_set<int> inliersResult;
-	srand(time(nullptr));
+    std::random_device random_device;
+    std::mt19937 engine{random_device()};
+    std::uniform_int_distribution<> dist(0,cloud->points.size());
+
 	// For max iterations
 	while(maxIterations--){
 
 		// Randomly sample subset and fit line
 		std::unordered_set<int> inliers;
 		while(inliers.size() < 3)
-			inliers.insert(rand() % cloud->points.size());
+			inliers.insert(dist(engine));
 
 		float x1, y1, z1, x2, y2, z2, x3, y3, z3;
 
@@ -133,7 +136,7 @@ typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(ty
     // Time segmentation process
     auto startTime = std::chrono::steady_clock::now();
 
-    // TODO:: Fill in the function to do voxel grid point reduction and region based filtering
+    // Voxel grid point reduction and region based filtering
     typename pcl::PointCloud<PointT>::Ptr cloud_filtered (new pcl::PointCloud<PointT>);
     typename pcl::VoxelGrid<PointT> sor;
     sor.setInputCloud(cloud);

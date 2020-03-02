@@ -18,6 +18,7 @@
 #include <ctime>
 #include <chrono>
 #include <unordered_set>
+#include <random>
 #include "render/box.h"
 #include "quiz/cluster/kdtree.h"
 
